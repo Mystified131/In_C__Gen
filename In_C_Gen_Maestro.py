@@ -40,14 +40,14 @@ def noteshift(insound, pitch, leng):
 
         if inlen >= leng2:
             outsound = nupitch_sound[0:leng2]
-            outsound2 = outsound.fade_in(10)
-            outsound4 = outsound2.fade_out(60)
+            outsound2 = outsound.fade_in(20)
+            outsound4 = outsound2.fade_out(40)
 
         if inlen < leng2:
             sillen = leng2 - inlen
             silaud = AudioSegment.silent(duration = sillen)
-            outsound2 = nupitch_sound.fade_in(10)
-            outsound3 = outsound2.fade_out(30)
+            outsound2 = nupitch_sound.fade_in(20)
+            outsound3 = outsound2.fade_out(40)
             outsound4 = outsound3 + silaud
 
         return outsound4
@@ -127,7 +127,7 @@ pattdict[51] = [(-.167, 250),(-.083, 250),(.5, 250)]
 pattdict[52] = [(-.083, 250),(.5, 250)]
 pattdict[53] = [(.5, 250),(-.083, 250)]
 
-srchstr = "C:\\Users\\mysti\\Coding\\In_C_Gen\\One_Shot_Bucket"
+srchstr = "C:\\Users\\mysti\\Coding\\In_C_Gen\\Sources_Bucket"
 
 content = []
 
@@ -144,7 +144,7 @@ conlen = len(content)
 
 print("")
 
-print("Gathering One Shots.")
+print("Gathering Samples.")
 
 for ctr in range(voices):
     rannum = random_number(conlen)

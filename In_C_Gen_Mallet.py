@@ -40,14 +40,14 @@ def noteshift(insound, pitch, leng):
 
     if inlen >= leng2:
         outsound = nupitch_sound[0:leng2]
-        outsound2 = nupitch_sound.fade_in(10)
-        outsound4 = outsound2.fade_out(60)
+        outsound2 = nupitch_sound.fade_in(20)
+        outsound4 = outsound2.fade_out(40)
 
     if inlen < leng2:
         sillen = leng2 - inlen
         silaud = AudioSegment.silent(duration = sillen)
-        outsound2 = nupitch_sound.fade_in(10)
-        outsound3 = outsound2.fade_out(30)
+        outsound2 = nupitch_sound.fade_in(20)
+        outsound3 = outsound2.fade_out(40)
         outsound4 = outsound3 + silaud
 
     return outsound4
@@ -149,7 +149,7 @@ pattdict[51] = [(-.167, 250),(-.083, 250),(.5, 250)]
 pattdict[52] = [(-.083, 250),(.5, 250)]
 pattdict[53] = [(.5, 250),(-.083, 250)]
 
-srchstr = "C:\\Users\\mysti\\Coding\\In_C_Gen\\One_Shot_Bucket"
+srchstr = "C:\\Users\\mysti\\Coding\\In_C_Gen\\Sources_Bucket"
 
 content = []
 
@@ -157,7 +157,8 @@ for subdir, dirs, files in os.walk(srchstr):
     for file in files:
         filepath = subdir + os.sep + file
                
-        if  filepath.endswith(".wav") and ("In_C_Inst" in str(filepath)):
+        #if  filepath.endswith(".wav") and ("In_C_Inst" in str(filepath)):
+        if  filepath.endswith(".wav"):
             content.append(filepath)
 
 voices = 35
@@ -166,7 +167,7 @@ conlen = len(content)
 
 print("")
 
-print("Gathering One Shots.")
+print("Gathering One Sources.")
 
 for ctr in range(voices):
     rannum = random_number(conlen)
@@ -258,7 +259,7 @@ for cr in range(totvoxlen):
 
     sonlist.append(trakval)
 
-seglen = 14
+seglen = 8
 
 for segmen in range(seglen):
 
@@ -424,17 +425,17 @@ for segmen in range(seglen):
 
         gamsnd = trakdubber(gamsnd, ttrak)
 
-    try: 
+    #try: 
         
-        finsnd = gamsnd.overlay(beattrk)
+        #finsnd = gamsnd.overlay(beattrk)
 
-    except:
+    #except:
 
-        finsnd = AudioSegment.silent(0)
+        #finsnd = AudioSegment.silent(0)
 
     otstr = 'C:\\Users\\mysti\\Coding\\In_C_Gen\\In_C_MixSegment_' + str(tim) + "_" + str(segn) + ".wav"
 
-    finsnd.export(otstr, format="wav")
+    gamsnd.export(otstr, format="wav")
 
     print("")
 
@@ -444,7 +445,9 @@ print("")
 
 print("Generation complete, segments in same folder as code.")
 
-exit
+call(["python", "In_C_Gen_Mallet.py"])
+
+#exit
 
 ## THE GHOST OF THE SHADOW ##
 
