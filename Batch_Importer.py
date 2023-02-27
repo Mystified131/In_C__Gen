@@ -12,6 +12,22 @@ from RandFunct2 import random_number2
 
 srchstr = 'F:\\Acid_Loops\\'
 
+genlst = ['Rock', 'Jazz', 'Chill', 'Reg', 'Dub', 'Rhodes', 'Machine', 'Beach', 'Jungle', 'Ghost', 'Analog', 'Dark', 'Choir', 'Funk', 'Horns', 'Organ', 'Brass', 'Ocean', 'Space', 'Strings', 'Bells', 'Groove', 'Hip', 'Amb', 'Ele', 'Tech', 'Pop', 'Afr', 'Eth', 'Arab', 'Classic', 'Mode']
+
+genlen = len(genlst)
+
+gench = random_number(genlen)
+
+genstr = genlst[gench]
+
+print("")
+
+print(genstr)
+
+print("")
+
+letstr = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
+
 content = []
 
 for subdir, dirs, files in os.walk(srchstr):
@@ -26,11 +42,7 @@ for subdir, dirs, files in os.walk(srchstr):
 
         filechr2 = filest[-6:-5]
 
-        letstr = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
-
-        #print(filechr)
-               
-        if  (filestr.endswith(".wav") and ('Chill' in filestr)) and  ('Vo' not in filestr): 
+        if  (filestr.endswith(".wav") and (genstr in filestr)) and  ('Vo' not in filestr): 
             isn = 0
             for stri in letstr:
                 if filechr2.startswith(stri): 

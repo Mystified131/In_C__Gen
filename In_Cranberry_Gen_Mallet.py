@@ -32,25 +32,47 @@ def noteshift(insound, pitch, leng):
             silaud = AudioSegment.silent(duration = leng2)
             return(silaud)
 
-        new_sample_rate = int(asound.frame_rate * (2.0 ** pitch))
-        nupitch_sound = asound._spawn(asound.raw_data, overrides={'frame_rate': new_sample_rate})
-        nupitch_sound = nupitch_sound.set_frame_rate(44100)
+    new_sample_rate = int(asound.frame_rate * (2.0 ** pitch))
+    nupitch_sound = asound._spawn(asound.raw_data, overrides={'frame_rate': new_sample_rate})
+    nupitch_sound = nupitch_sound.set_frame_rate(44100)
 
-        inlen = len(nupitch_sound)
+    inlen = len(nupitch_sound)
 
-        if inlen >= leng2:
-            outsound = nupitch_sound[0:leng2]
-            outsound2 = outsound.fade_in(20)
-            outsound4 = outsound2.fade_out(40)
+    if inlen >= leng2:
+        outsound = nupitch_sound[0:leng2]
+        outsound2 = nupitch_sound.fade_in(20)
+        outsound4 = outsound2.fade_out(40)
 
-        if inlen < leng2:
-            sillen = leng2 - inlen
-            silaud = AudioSegment.silent(duration = sillen)
-            outsound2 = nupitch_sound.fade_in(20)
-            outsound3 = outsound2.fade_out(40)
-            outsound4 = outsound3 + silaud
+    if inlen < leng2:
+        sillen = leng2 - inlen
+        silaud = AudioSegment.silent(duration = sillen)
+        outsound2 = nupitch_sound.fade_in(20)
+        outsound3 = outsound2.fade_out(40)
+        outsound4 = outsound3 + silaud
 
-        return outsound4
+    return outsound4
+
+def makbeats(track, trlen):
+    try:
+
+        bsound = AudioSegment.from_wav(track)
+
+    except:
+
+        print("")
+        print("New sound error.")
+        silaud3 = AudioSegment.silent(duration = trlen)
+        return(silaud3)
+
+    belen = len(bsound)
+
+    totreps = int((trlen / belen) + 1)
+
+    betaud = bsound - 8
+    betaud2 = betaud * totreps
+    bettrkaud = betaud2[0:trlen]
+
+    return bettrkaud
 
 def trakdubber(gamsnd, otrack):
 
@@ -70,6 +92,10 @@ for i in right_now:
 tim = ("".join(list))
 
 pattdict = {}
+
+# ton = .083 x -12 (or sil)
+# dur = 250 - 8000
+
 
 pattdict[1] = [(-.333, 80),(-.249, 920),(-.333, 80),(-.249, 920),(-.333, 80),(-.249, 920)]
 pattdict[2] = [(-.333, 80),(-.249, 420),(-.167, 500),(-.249, 1000)]
@@ -133,16 +159,19 @@ for subdir, dirs, files in os.walk(srchstr):
     for file in files:
         filepath = subdir + os.sep + file
                
-        if  filepath.endswith(".wav") and ("In_C_Inst" in str(filepath)):
+        #if  filepath.endswith(".wav") and ("In_C_Inst" in str(filepath)):
+        if  filepath.endswith(".wav"):
             content.append(filepath)
 
-voices = 35
+voices = 18
+
+#voices = 35
 
 conlen = len(content)
 
 print("")
 
-print("Gathering Samples.")
+print("Gathering One Sources.")
 
 for ctr in range(voices):
     rannum = random_number(conlen)
@@ -160,6 +189,49 @@ for ctr in range(voices):
         print("")
         print("Copy/IO issue for Sample: ", str(ctr))
 
+srchstr1 = "C:\\Users\\mysti\\Coding\\In_C_Gen\\newsamplebeats"
+
+contentbeats = []
+
+for subdir, dirs, files in os.walk(srchstr1):
+    for file in files:
+        filepath = subdir + os.sep + file
+               
+        if  filepath.endswith(".wav") and ("new" in str(filepath)):
+            contentbeats.append(filepath)
+
+beats = 1
+
+conbeatlen = len(contentbeats)
+
+print("")
+
+print("Gathering Rhythm.")
+
+for ctr in range(beats):
+    rannum = random_number(conbeatlen)
+    movstr = contentbeats[rannum]
+
+    beataudtr = 'C:\\Users\\mysti\\Coding\\In_C_Gen\\In_C_Rhythm_' + str(ctr) + ".wav"
+
+    try:
+        shutil.copy(movstr, beataudtr)
+        #contvox.append(outstr)
+        print("")
+        print("Successful copy of BeatSample: ", str(ctr))
+
+    except:
+        print("")
+        print("Copy/IO issue for Sample: ", str(ctr))
+
+print("")
+
+print("Creating rhythm track")
+
+trklen = 300000
+
+beattrk = makbeats(beataudtr, trklen)
+
 contvox = []
 
 voic = len(contvox)
@@ -175,13 +247,13 @@ for subdir, dirs, files in os.walk(srchstr2):
 
 seg = 0
 
-totvoxlen = 35
-
-trklen = 300000
+totvoxlen = 24
 
 contlen = len(contvox)
 
 sonlist = []
+
+#totvoxlen = 10
 
 for cr in range(totvoxlen):
 
@@ -191,7 +263,7 @@ for cr in range(totvoxlen):
 
     sonlist.append(trakval)
 
-seglen = 10
+seglen = 3
 
 for segmen in range(seglen):
 
@@ -228,28 +300,42 @@ for segmen in range(seglen):
 
             patvals = pattdict[phrchoc]
 
-            print("")
+            #print("")
 
-            print(patvals)
+            #print(patvals)
 
-            notnum = len(patvals)
+            notnum = random_number2(6, 24)
+
+            # In C Uncomment notnum = len(patvals)
 
             phraud =  AudioSegment.silent(0)
 
             for notspec in range(notnum):
 
-                phrvals = patvals[notspec]
+                #In C uncomment phrvals = patvals[notspec]
 
-                pitval = phrvals[0]
-                durval = phrvals[1]
+                durchprod = random_number2(1, 17)
+                durval = 250 * durchprod
+
+                silch = random_number(8)
+
+                if silch > 1: 
+                    pittchprod = random_number2(-4, 5)
+                    pitval = .083 * pittchprod
+                    newnot = noteshift(trkval, pitval, durval)
+
+                if silch <= 1:
+                    pitval2 = 'sil'
+                    newnot = noteshift(trkval, pitval2, durval)
+
+                # In C uncomment pitval = phrvals[0]
+                # In C uncomment durval = phrvals[1]
 
                 #newnot = AudioSegment.silent(0)
 
                 #print("")
 
                 #print("Building note: " + str(pitval))
-
-                newnot = noteshift(trkval, pitval, durval)
 
                 phraud += newnot
 
@@ -357,9 +443,17 @@ for segmen in range(seglen):
 
         gamsnd = trakdubber(gamsnd, ttrak)
 
-    otstr = 'C:\\Users\\mysti\\Coding\\In_C_Gen\\In_C_MixSegment_' + str(tim) + "_" + str(segn) + ".wav"
+    try: 
+        
+        finsnd = gamsnd.overlay(beattrk)
 
-    gamsnd.export(otstr, format="wav")
+    except:
+
+        finsnd = AudioSegment.silent(0)
+
+    otstr = 'C:\\Users\\mysti\\Coding\\In_C_Gen\\In_Cranberry_MixSegment_' + str(tim) + "_" + str(segn) + ".wav"
+
+    finsnd.export(otstr, format="wav")
 
     print("")
 
@@ -369,7 +463,17 @@ print("")
 
 print("Generation complete, segments in same folder as code.")
 
-exit
+for subdir, dirs, files in os.walk(srchstr):
+    for file in files:
+        filepath = subdir + os.sep + file
+               
+        #if  filepath.endswith(".wav") and ("In_C_Inst" in str(filepath)):
+        if  filepath.endswith(".wav"):
+            os.remove(filepath)
+
+call(["python", "Belltone_Importer.py"])
+
+#exit
 
 ## THE GHOST OF THE SHADOW ##
 
